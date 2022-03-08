@@ -1,0 +1,13 @@
+#
+# New resolvers for use with InfoBlox
+#
+domain mmm.ucar.edu ucar.edu
+nameserver 128.117.65.44
+# 128.117.65.44 => dnsi1.ucar.edu
+nameserver 128.117.65.45
+# 128.117.65.45 => dnsi2.ucar.edu
+nameserver 128.117.177.1
+# 128.117.177.1 => dnsin1.nwsc.ucar.edu
+nameserver 128.117.177.44
+# 128.117.177.44 => dnsin2.nwsc.ucar.edu
+

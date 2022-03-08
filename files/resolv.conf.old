@@ -1,0 +1,5 @@
+#
+search mmm.ucar.edu ucar.edu
+nameserver 128.117.88.2
+nameserver 128.117.88.3
+

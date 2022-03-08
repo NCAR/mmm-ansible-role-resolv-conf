@@ -1,0 +1,5 @@
+---
+
+galaxy_info:
+  role_name: mmm-ansible-role-resolv-conf
+dependencies:

@@ -23,7 +23,17 @@
     group: root
     mode: 0600
 
-# Set local fact: defaultNIC
+- name: Set defaultNIC local fact
+  template:
+    src: defaultNIC.fact.j2
+    dest: /etc/ansible/facts.d/defaultNIC.fact
+    owner: root
+    group: root
+    mode: 0755
+
+- name: refresh facts
+  setup:
+
 - block:
   - name: Remove DNS entries in default ifcfg file
      become: yes

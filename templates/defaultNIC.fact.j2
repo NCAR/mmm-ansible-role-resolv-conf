@@ -1,0 +1,14 @@
+#!{{ ansible_env._ }}
+
+import os
+import subprocess
+
+# Find the default NIC for system
+p = subprocess.Popen("/usr/sbin/route | grep '^default' | grep -o '[^ ]*$'", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+
+holder = p.stdout.read()[:-1]
+
+defaultNIC = holder.decode("utf-8")
+
+# Return JSON formatted output
+# print('{ "crypto_policy": "' + returnStatus + '" }' )

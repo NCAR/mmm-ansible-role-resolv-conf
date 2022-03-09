@@ -7,25 +7,53 @@
     group: root
     mode: 0755
 
-- block: 
-   - name: 90-dns-none.conf
-     copy:
-       src:  90-dns-none.conf
-       dest: /etc/NetworkManager/conf.d
-       owner: root
-       group: root
-       mode: 0755
+- name: 90-dns-none.conf
+  copy:
+    src:  90-dns-none.conf
+    dest: /etc/NetworkManager/conf.d
+    owner: root
+    group: root
+    mode: 0755
 
-   - name: resolv.conf
-     copy:
-       src: resolv.conf
-       dest: /etc
-       owner: root
-       group: root
-       mode: 0600
+- name: resolv.conf
+  copy:
+    src: resolv.conf
+    dest: /etc
+    owner: root
+    group: root
+    mode: 0600
+
+# Set local fact: defaultNIC
+- block:
+  - name: Remove DNS entries in default ifcfg file
+     become: yes
+     lineinfile:
+       path: /etc/sysconfig/network-scripts/ifcfg-{{ defaultNIC }}
+       regexp: "DNS"
+       state: absent
+       backup: yes
+     check_mode: yes
+  
+  - name: Remove DOMAIN entries in default ifcfg file
+     become: yes
+     lineinfile:
+       path: /etc/sysconfig/network-scripts/ifcfg-{{ defaultNIC }}
+       regexp: "DOMAIN"
+       state: absent
+       backup: yes
+     check_mode: yes
+  
+  - name: Ensure NM_CONTROLLED is enabled
+     become: yes
+     lineinfile:
+       path: /etc/sysconfig/network-scripts/ifcfg-{{ defaultNIC }}
+       regexp: "NM_CONTROLLED="
+       line: "NM_CONTROLLED=YES"
+       state: present
+       backup: yes
+     check_mode: yes
+
   notify:
    - restart NetworkManager
-#
-# Run script to remove DNS, DOMAIN, NM_controlled from ifcfg of default NIC
-#
+
 #

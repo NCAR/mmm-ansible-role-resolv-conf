@@ -1,2 +1,3 @@
 # mmm-ansible-role-resolv-conf
-Resolv.conf Config
+
+This role is for making changes to the DNS system config for InfoBlox conversion.

@@ -17,11 +17,19 @@
 
 - name: resolv.conf
   copy:
-    src: resolv.conf
-    dest: /etc
+    src: resolv.conf.IB
+    dest: /etc/resolv.conf
     owner: root
     group: root
     mode: 0600
+
+- name: ansible facts dir
+  file:
+    path: /etc/ansible/facts.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 
 - name: Set defaultNIC local fact
   template:
@@ -32,38 +40,41 @@
     mode: 0755
 
 - name: refresh facts
-  setup:
+  setup: filter='ansible_local'
 
-- block:
-  - name: Remove DNS entries in default ifcfg file
-     become: yes
-     lineinfile:
-       path: /etc/sysconfig/network-scripts/ifcfg-{{ defaultNIC }}
-       regexp: "DNS"
-       state: absent
-       backup: yes
-     check_mode: yes
-  
-  - name: Remove DOMAIN entries in default ifcfg file
-     become: yes
-     lineinfile:
-       path: /etc/sysconfig/network-scripts/ifcfg-{{ defaultNIC }}
-       regexp: "DOMAIN"
-       state: absent
-       backup: yes
-     check_mode: yes
-  
-  - name: Ensure NM_CONTROLLED is enabled
-     become: yes
-     lineinfile:
-       path: /etc/sysconfig/network-scripts/ifcfg-{{ defaultNIC }}
-       regexp: "NM_CONTROLLED="
-       line: "NM_CONTROLLED=YES"
-       state: present
-       backup: yes
-     check_mode: yes
-
+- name: Remove DNS entries in default ifcfg file
+  become: yes
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-{{ ansible_local.defaultNIC.defaultNIC }}
+    regexp: "DNS"
+    state: absent
+    backup: yes
+  check_mode: yes
   notify:
-   - restart NetworkManager
+    - restart NetworkManager
+  
+- name: Remove DOMAIN entries in default ifcfg file
+  become: yes
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-{{ ansible_local.defaultNIC.defaultNIC }}
+    regexp: "DOMAIN"
+    state: absent
+    backup: yes
+  check_mode: yes
+  notify:
+    - restart NetworkManager
+  
+- name: Ensure NM_CONTROLLED is enabled
+  become: yes
+  lineinfile:
+    path: /etc/sysconfig/network-scripts/ifcfg-{{ ansible_local.defaultNIC.defaultNIC }}
+    regexp: "NM_CONTROLLED="
+    line: "NM_CONTROLLED=YES"
+    state: present
+    backup: yes
+  check_mode: yes
+  notify:
+    - restart NetworkManager
 
-#
+
+

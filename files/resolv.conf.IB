@@ -2,10 +2,10 @@
 # New resolvers for use with InfoBlox
 #
 search mmm.ucar.edu ucar.edu
-nameserver 128.117.64.44
-# 128.117.64.44 => dnsi1.ucar.edu
 nameserver 128.117.64.45
 # 128.117.64.45 => dnsi2.ucar.edu
+nameserver 128.117.64.44
+# 128.117.64.44 => dnsi1.ucar.edu
 nameserver 128.117.177.1
 # 128.117.177.1 => dnsin1.nwsc.ucar.edu
 nameserver 128.117.177.44
